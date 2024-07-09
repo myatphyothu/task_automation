@@ -2,13 +2,15 @@ import os
 import json
 import argparse
 from PIL import Image, ImageEnhance, ImageFilter
+from image_editor import ImageEditor
 
 
 SETTINGS = 'settings.json'
 
 def get_cli_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-dir', '--dir', required=True, help='directory to photos and images')
+    parser.add_argument('-input', '--input', required=True, help='directory to photos and images')
+    parser.add_argument('-output', '--output', required=True, help='directory where edited images will be saved')
     return parser.parse_args()
 
 
@@ -20,14 +22,6 @@ def load_settings():
         return json.load(f)
 
 
-def get_images(dir, img_file_types):
-    files = []
-    for f in os.listdir(dir):
-        filename, extension = os.path.splitext(f)
-        if extension.replace('.', '').lower() in img_file_types:
-            files.append(f)
-    return [f'{dir}/{f}' for f in files]
-
 def main():
     args = get_cli_args()
     settings = load_settings()
@@ -36,9 +30,18 @@ def main():
         print('Error: unable to load settings.')
         exit()
 
-    if args.dir:
-        images = get_images(args.dir, settings['image-file-types'])
-        print(images)
+    if args.input and args.output:
+        editor = ImageEditor(args.input, args.output)
+        editor.accept_file_types = settings['image-file-types']
+        editor.edit_options = settings['edit-options']
+
+        editor.apply_edits()
+        editor.save()
+
+    else:
+        print('error: args.input and args.output have to be specified.')
+        print(f'args.input: {args.input if args.input else "empty"} ')
+        print(f'args.output: {args.output if args.output else "empty"}')
 
 
 if __name__ == '__main__':
