@@ -1,4 +1,8 @@
 {
   "image-file-types": ["png", "jpg", "jpeg", "tiff", "gif", "raw", "webp"],
-  "edit-options": ["sharpen"]
+  "edit-options": [
+    "sharpen",
+    "rotate,-35",
+    "contrast,1"
+  ]
 }

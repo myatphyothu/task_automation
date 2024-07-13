@@ -1,5 +1,6 @@
 import os
-from PIL import Image, ImageEnhance, ImageFilter
+from PIL import Image
+from image_operations import ImageOperations
 
 
 DEFAULT_IMAGE_FILE_TYPES = ['jpg', 'jpeg', 'png', 'gif']
@@ -17,7 +18,10 @@ class ImageEditor(object):
         self._edit_options = edit_options
 
         self._edit_img_operations = {
-            'sharpen': self._sharpen
+            'sharpen': ImageOperations.sharpen,
+            'convert': ImageOperations.convert,
+            'rotate': ImageOperations.rotate,
+            'contrast': ImageOperations.contrast
         }
 
         self.edited_images = {}
@@ -62,15 +66,15 @@ class ImageEditor(object):
                 files.append(file)
         return [f'{self._path}/{file}' for file in files]
 
-    def _sharpen(self, original_img):
-        return original_img.filter(ImageFilter.SHARPEN)
-
     def _edit_an_image(self, original_img):
         final_img = original_img
 
-        for operation, apply_edit in self._edit_img_operations.items():
-            if operation in self._edit_options:
-                final_img = apply_edit(final_img)
+        for operation in self._edit_options:
+            operation = operation.split(',')
+            fn = operation[0]
+            param = operation[1] if len(operation) > 1 else None
+            print(fn, param)
+            final_img = self._edit_img_operations[fn](original_img, param=param) if fn in self._edit_img_operations else original_img
 
         return final_img
 
@@ -78,6 +82,7 @@ class ImageEditor(object):
         edited_images = {}
         for img_file in image_files:
             img = Image.open(img_file)
+            print(img.filename)
             edited_img = self._edit_an_image(img)
             edited_images[img_file] = edited_img
         return edited_images
