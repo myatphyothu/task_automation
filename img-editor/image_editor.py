@@ -63,6 +63,7 @@ class ImageEditor(object):
         for file in os.listdir(self.path):
             filename, extension = os.path.splitext(file)
             if extension.replace('.', '').lower() in self._accept_file_types:
+                print(f'image file found: {file}')
                 files.append(file)
         return [f'{self._path}/{file}' for file in files]
 
@@ -92,7 +93,9 @@ class ImageEditor(object):
         for filename, img in self.edited_images.items():
             base_filename = os.path.basename(filename)
             name, ext = os.path.splitext(base_filename)
-            img.save(f'{self.output_path}/{name}_edited{ext}')
+            filename = f'{self.output_path}/{name}_edited{ext}'
+            print(f'saved to {filename}.')
+            img.save(filename)
 
     def apply_edits(self):
         image_files = self._get_image_files()

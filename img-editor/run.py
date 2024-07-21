@@ -1,7 +1,6 @@
 import os
 import json
 import argparse
-from PIL import Image, ImageEnhance, ImageFilter
 from image_editor import ImageEditor
 
 
@@ -12,6 +11,12 @@ def get_cli_args():
     parser.add_argument('-input', '--input', required=True, help='directory to photos and images')
     parser.add_argument('-output', '--output', required=True, help='directory where edited images will be saved')
     return parser.parse_args()
+
+
+def get_user_input():
+    input = input('Enter path to photos or images:')
+    output = input('Enter path where edited images will be saved:')
+    return input, output
 
 
 def load_settings():

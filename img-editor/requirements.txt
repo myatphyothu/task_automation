@@ -1,1 +1,2 @@
+jproperties==2.1.1
 Pillow==10.4.0

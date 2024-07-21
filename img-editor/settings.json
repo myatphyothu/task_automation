@@ -1,5 +1,7 @@
 {
+  "docker-mnt-path": "/tmp",
   "image-file-types": ["png", "jpg", "jpeg", "tiff", "gif", "raw", "webp"],
+  "available-edit-options": ["sharpen", "rotate", "contrast"],
   "edit-options": [
     "sharpen",
     "rotate,-35",
